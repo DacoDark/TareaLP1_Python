@@ -18,7 +18,7 @@ import itertools
 
 # 'r' indica que la cadena es una cadena cruda (raw string), lo que significa que los caracteres de escape se interpretan literalmente
 
-EBNF = re.compile(r"^[0-9AEIOUaeiouÁÉÍÓÚáéíóúA-Za-zÑñ¿?¡!,.;'-(): ]+$")
+EBNF = re.compile(r"^[0-9AEIOUaeiouÁÉÍÓÚáéíóúA-Za-zÑñ¿?¡!,.;'-():\" ]+$")
 letras = re.compile(r"[A-Za-zÑñÁÉÍÓÚáéíóú]+")
 vocales = re.compile(r"[AEIOUaeiouÁÉÍÓÚáéíóú]")
 
@@ -116,11 +116,12 @@ def rima_asonante(palabra1, palabra2):
 def puntaje_rima(palabra1, palabra2):
     if (palabra1 == palabra2):
         return 'gemela', 1  # Si son iguales, puntaje es la longitud de la palabra
+    
     puntaje_con = rima_consonante(palabra1, palabra2)
     if puntaje_con >= 5:
         return 'consonante', 8
     elif puntaje_con >= 3:
-        return 'asonante', 5
+        return 'consonante', 5
     
     puntaje_ason = rima_asonante(palabra1, palabra2)
     if puntaje_ason >= 3:
@@ -180,9 +181,11 @@ with open("decision.txt", "w", encoding="utf-8") as out:
             if tipo != 'sin rima':
                 rima_verso[a] = True
                 rima_verso[b] = True
+                tipos_rimas_detectados.add(tipo)
             else:
                 contador_sin_rima += 1
-            tipos_rimas_detectados.add(tipo)
+                
+            #tipos_rimas_detectados.add(tipo)
         
         #Penalización
         if not all(rima_verso):
